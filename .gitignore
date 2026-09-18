@@ -1,0 +1,15 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local tooling
+node_modules/
+.env
+.env.*
+
+# Build output
+.vercel/
+dist/
+build/

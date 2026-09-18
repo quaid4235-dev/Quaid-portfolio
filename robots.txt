@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-cyan-seven-45jec47p02.vercel.app/sitemap.xml
