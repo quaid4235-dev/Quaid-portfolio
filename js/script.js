@@ -1,23 +1,34 @@
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-const root=document.documentElement,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-// theme
-try{const t=localStorage.getItem('theme');if(t)root.dataset.theme=t}catch{}
-$('#theme').onclick=()=>{const t=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=t;try{localStorage.setItem('theme',t)}catch{}};
-// menu + sticky header
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Mobile navigation
 const menu=$('#menu'),burger=$('#burger');
-burger.onclick=()=>burger.setAttribute('aria-expanded',menu.classList.toggle('open'));
-$$('a',menu).forEach(a=>a.onclick=()=>{menu.classList.remove('open');burger.setAttribute('aria-expanded','false')});
-addEventListener('keydown',e=>{if(e.key==='Escape')menu.classList.remove('open')});
-addEventListener('scroll',()=>$('#hdr').classList.toggle('scrolled',scrollY>10),{passive:true});
-// reveal + counters
-const count=el=>{const n=+el.dataset.n;if(reduce){el.textContent=n+'+';return}let i=0;const t=setInterval(()=>{el.textContent=++i+(i>=n?'+':'');if(i>=n)clearInterval(t)},220)};
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');$$('[data-n]',e.target).forEach(count);io.unobserve(e.target)}),{threshold:.12});
-$$('.rv').forEach(el=>io.observe(el));
-// typewriter
-const words=['web systems','Flask apps','face-recognition tools','AI-powered products'],out=$('#type');
-if(reduce){out.textContent=words[0]}else{let w=0,c=0,del=false;(function tick(){const s=words[w];out.textContent=s.slice(0,c);
-if(!del&&c===s.length){del=true;return setTimeout(tick,1600)}
-if(del&&c===0){del=false;w=(w+1)%words.length}
-c+=del?-1:1;setTimeout(tick,del?35:70)})()}
-// card spotlight
-$$('.spot').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--x',e.clientX-r.left+'px');c.style.setProperty('--y',e.clientY-r.top+'px')}));
+if(menu&&burger){
+  const closeMenu=()=>{menu.classList.remove('open');burger.setAttribute('aria-expanded','false');burger.setAttribute('aria-label','Open menu')};
+  burger.addEventListener('click',()=>{
+    const open=menu.classList.toggle('open');
+    burger.setAttribute('aria-expanded',String(open));
+    burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+  });
+  $$('a',menu).forEach(link=>link.addEventListener('click',closeMenu));
+  addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu()});
+}
+
+// Sticky header
+const header=$('#hdr');
+const updateHeader=()=>header?.classList.toggle('scrolled',scrollY>10);
+addEventListener('scroll',updateHeader,{passive:true});
+updateHeader();
+
+// Reveal sections as they enter the viewport
+const revealTargets=$$('.rv');
+if(reduce||!('IntersectionObserver' in window)){
+  revealTargets.forEach(el=>el.classList.add('in'));
+}else{
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    entry.target.classList.add('in');
+    observer.unobserve(entry.target);
+  }),{threshold:.12});
+  revealTargets.forEach(el=>observer.observe(el));
+}
