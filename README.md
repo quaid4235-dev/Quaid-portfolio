@@ -1,40 +1,35 @@
-# Quaid Khan — portfolio
+# Quaid Khan — Web Developer Portfolio
 
-A lightweight, accessible static portfolio for Quaid Khan, a Computer Science graduate and software developer focused on Python, Flask, web systems, SQL, and applied computer vision.
+A lightweight, responsive, multi-page portfolio for Quaid Khan, a Web Developer focused on frontend web development and practical web applications.
 
-## Stack
+## Pages
 
-- Semantic HTML
-- CSS with custom properties, Grid, Flexbox, and responsive media queries
-- Small, dependency-free JavaScript for the mobile menu and reveal transitions
-- No build step or framework required
+- `index.html` — Home and featured work
+- `about.html` — About Quaid and development approach
+- `services.html` — Six website development services
+- `portfolio.html` — Projects and illustrative CSS previews
+- `contact.html` — Contact options and validated email-preparation form
 
-## Project structure
-
-- `index.html` — portfolio content and semantic structure
-- `css/style.css` — design system and responsive styles
-- `js/script.js` — accessible menu and progressive enhancement
-- `favicon.svg`, `robots.txt`, `sitemap.xml`, `vercel.json` — deployment and metadata files
+Every page uses the shared `css/style.css` and `js/script.js`. Navigation and footer links point to the five standalone HTML documents. The project is framework-free and has no package dependencies or build step.
 
 ## Run locally
 
-Open `index.html` directly in a browser, or use any static server:
+Open `index.html` directly, or serve the project root using any static server, for example:
 
-```bash
+```sh
 python -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Then open `http://localhost:8000`.
 
-## Deploy to Vercel
+## Contact form behavior
 
-Import this repository in Vercel. Leave the framework preset as **Other**, use the repository root as the project root, and leave the build command empty. Vercel serves `index.html` as a static site.
+The form uses browser validation and opens a prefilled `mailto:` message to `quaid4235@gmail.com`. This static site does not send or store form submissions; visitors must send the prepared email from their own email application.
 
-## Updating the portfolio
+## Images and project previews
 
-- Replace the profile image URL in `index.html` with a local optimized image in `assets/images/` when one is available.
-- Add a CV at `assets/cv.pdf` and add a download link to the hero if the document is ready to publish.
-- Update the text, links, and project details directly in `index.html`.
-- Update the canonical URL in `index.html`, `robots.txt`, and `sitemap.xml` if the deployment domain changes.
+The existing personal portrait remains in the project root and is used only as Quaid's profile image. Project preview panels are CSS illustrations rather than representations of actual application screenshots. See `assets/IMAGE_CREDITS.md` for asset notes and the supplied stock-image references that were reviewed but not used.
 
-No secrets or API keys are required.
+## Deployment
+
+This is a static site and can be deployed from the repository root on Vercel or another static host without a build command. No `vercel.json`, package manifest, framework, or dependency lockfile was present in the inspected repository root; no deployment configuration was removed or changed. Update the canonical links in HTML and the sitemap if the production domain changes.

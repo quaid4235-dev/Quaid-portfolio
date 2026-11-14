@@ -1,3 +1,6 @@
+/* Progressive enhancement: content stays visible if JavaScript is unavailable. */
+document.documentElement.classList.add('js');
+
 const $=(selector,root=document)=>root.querySelector(selector);
 const $$=(selector,root=document)=>[...root.querySelectorAll(selector)];
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -40,7 +43,7 @@ if(reduceMotion||!('IntersectionObserver' in window)){
 }
 
 // Validate the contact form and prepare an email in the visitor's mail app.
-// A static GitHub Pages site has no server to deliver/store form submissions.
+// This static site has no server to deliver or store form submissions.
 const contactForm=$('#contact-form');
 if(contactForm){
   contactForm.addEventListener('submit',event=>{
