@@ -5,22 +5,31 @@ const $=(selector,root=document)=>root.querySelector(selector);
 const $$=(selector,root=document)=>[...root.querySelectorAll(selector)];
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Accessible mobile navigation, used identically on every page.
+// Accessible mobile navigation.
 const menu=$('#menu');
 const burger=$('#burger');
 if(menu&&burger){
-  const closeMenu=()=>{
+  const closeMenu=({restoreFocus=false}={})=>{
     menu.classList.remove('open');
     burger.setAttribute('aria-expanded','false');
     burger.setAttribute('aria-label','Open menu');
+    if(restoreFocus)burger.focus();
   };
   burger.addEventListener('click',()=>{
     const expanded=menu.classList.toggle('open');
     burger.setAttribute('aria-expanded',String(expanded));
     burger.setAttribute('aria-label',expanded?'Close menu':'Open menu');
   });
-  $$('a',menu).forEach(link=>link.addEventListener('click',closeMenu));
-  addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu()});
+  $$('a',menu).forEach(link=>link.addEventListener('click',()=>closeMenu()));
+  addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&menu.classList.contains('open'))closeMenu({restoreFocus:true});
+  });
+  document.addEventListener('click',event=>{
+    if(menu.classList.contains('open')&&!menu.contains(event.target)&&!burger.contains(event.target))closeMenu();
+  });
+  addEventListener('resize',()=>{
+    if(innerWidth>767)closeMenu();
+  },{passive:true});
 }
 
 // Subtle sticky header state.
